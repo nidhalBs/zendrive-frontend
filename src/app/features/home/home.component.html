@@ -1,0 +1,208 @@
+<!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="hero-badge animate-fade-in">Service Premium de Transport</span>
+          <h1 class="animate-fade-in">Voyagez avec <span class="gradient-text">Élégance</span> et Sérénité</h1>
+          <p class="animate-fade-in">Transferts aéroport, excursions privées et transport VIP. Découvrez un service de qualité supérieure avec des chauffeurs professionnels.</p>
+          <div class="hero-actions animate-fade-in">
+            <a routerLink="/booking" class="btn btn-primary btn-lg">
+              <i class="material-icons">directions_car</i> Réserver maintenant
+            </a>
+            <a routerLink="/fleet" class="btn btn-white btn-lg">Découvrir la flotte</a>
+          </div>
+          <div class="hero-stats animate-fade-in">
+            <div class="stat"><span class="stat-number">5000+</span><span class="stat-label">Clients satisfaits</span></div>
+            <div class="stat"><span class="stat-number">15K+</span><span class="stat-label">Transferts réalisés</span></div>
+            <div class="stat"><span class="stat-number">4.9</span><span class="stat-label">Note moyenne</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-wave">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 120L48 108C96 96 192 72 288 60C384 48 480 48 576 54C672 60 768 72 864 78C960 84 1056 84 1152 78C1248 72 1344 60 1392 54L1440 48V120H0Z" fill="var(--bg-secondary)"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section class="booking-section">
+      <div class="container">
+        <div class="booking-card animate-slide-up">
+          <div class="booking-tabs">
+            <button [class.active]="bookingTab === 'transfer'" (click)="bookingTab = 'transfer'">
+              <i class="material-icons">flight</i> Transfert
+            </button>
+            <button [class.active]="bookingTab === 'excursion'" (click)="bookingTab = 'excursion'">
+              <i class="material-icons">explore</i> Excursion
+            </button>
+          </div>
+          <div class="booking-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Lieu de prise en charge</label>
+                <input type="text" class="form-control" placeholder="Aéroport, hôtel, adresse...">
+              </div>
+              <div class="form-group">
+                <label>Destination</label>
+                <input type="text" class="form-control" placeholder="Votre destination...">
+              </div>
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Passagers</label>
+                <select class="form-control">
+                  @for (i of [1,2,3,4,5,6,7,8]; track i) {
+                    <option [value]="i">{{i}} passager{{i > 1 ? 's' : ''}}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <a routerLink="/booking" class="btn btn-primary btn-lg w-100">
+              <i class="material-icons">search</i> Rechercher un véhicule
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+      <div class="container">
+        <div class="section-title">
+          <p class="subtitle">Nos Services</p>
+          <h2>Un Service Complet pour Tous Vos Déplacements</h2>
+          <p>Des solutions de transport sur mesure pour répondre à tous vos besoins</p>
+        </div>
+        <div class="services-grid">
+          @for (service of services; track service.title) {
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="material-icons">{{service.icon}}</i>
+              </div>
+              <h3>{{service.title}}</h3>
+              <p>{{service.description}}</p>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Fleet Section -->
+    <section class="fleet-section">
+      <div class="container">
+        <div class="section-title">
+          <p class="subtitle">Notre Flotte</p>
+          <h2>Des Véhicules d'Exception</h2>
+          <p>Choisissez parmi notre sélection de véhicules premium</p>
+        </div>
+        <div class="fleet-grid">
+          @for (vehicle of vehicles; track vehicle.id) {
+            <div class="vehicle-card">
+              <div class="vehicle-image">
+                <img [src]="vehicle.imageUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400'" [alt]="vehicle.name">
+                <span class="vehicle-badge badge-primary">{{vehicle.comfortLevel}}</span>
+              </div>
+              <div class="vehicle-info">
+                <h3>{{vehicle.name}}</h3>
+                <p class="vehicle-brand">{{vehicle.brand}} {{vehicle.model}}</p>
+                <div class="vehicle-features">
+                  <span><i class="material-icons">person</i> {{vehicle.passengerCapacity}} places</span>
+                  <span><i class="material-icons">luggage</i> {{vehicle.baggageCapacity}} bagages</span>
+                </div>
+                <div class="vehicle-price">
+                  <span class="price">À partir de {{vehicle.baseFare || vehicle.pricePerKm}} TND</span>
+                  <a routerLink="/booking" class="btn btn-primary btn-sm">Réserver</a>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="text-center mt-4">
+          <a routerLink="/fleet" class="btn btn-outline">Voir toute la flotte</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Routes -->
+    <section class="routes-section">
+      <div class="container">
+        <div class="section-title">
+          <p class="subtitle">Destinations Populaires</p>
+          <h2>Nos Trajets les Plus Demandés</h2>
+        </div>
+        <div class="routes-grid">
+          @for (route of popularRoutes; track route.id) {
+            <div class="route-card">
+              <div class="route-image">
+                <img [src]="route.imageUrl || 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400'" [alt]="route.originName">
+              </div>
+              <div class="route-info">
+                <div class="route-path">
+                  <span class="route-origin">{{route.originName}}</span>
+                  <i class="material-icons">arrow_forward</i>
+                  <span class="route-dest">{{route.destinationName}}</span>
+                </div>
+                <div class="route-details">
+                  <span><i class="material-icons">straighten</i> {{route.distanceKm}} km</span>
+                  <span><i class="material-icons">schedule</i> ~{{route.estimatedDurationMinutes}} min</span>
+                </div>
+                @if (route.basePrice) {
+                  <div class="route-price">À partir de <strong>{{route.basePrice}} TND</strong></div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+      <div class="container">
+        <div class="section-title">
+          <p class="subtitle">Témoignages</p>
+          <h2>Ce Que Disent Nos Clients</h2>
+        </div>
+        <div class="reviews-grid">
+          @for (review of reviews; track review.id) {
+            <div class="review-card">
+              <div class="review-stars">
+                @for (s of getStars(review.rating); track $index) {
+                  <i class="material-icons star">star</i>
+                }
+              </div>
+              <p class="review-text">"{{review.comment}}"</p>
+              <div class="review-author">
+                <div class="review-avatar">{{review.clientName.charAt(0)}}</div>
+                <div>
+                  <strong>{{review.clientName}}</strong>
+                  <span>{{review.createdAt | date:'MMM yyyy'}}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <h2>Prêt à Voyager en Toute Sérénité ?</h2>
+          <p>Réservez votre transfert en quelques clics et profitez d'un service premium</p>
+          <div class="cta-actions">
+            <a routerLink="/booking" class="btn btn-white btn-lg">
+              <i class="material-icons">directions_car</i> Réserver maintenant
+            </a>
+            <a routerLink="/contact" class="btn btn-outline btn-lg" style="border-color: white; color: white;">
+              Nous contacter
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>

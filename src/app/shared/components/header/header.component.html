@@ -1,0 +1,32 @@
+<header class="header" [class.scrolled]="isScrolled">
+      <div class="container">
+        <div class="header-inner">
+          <a routerLink="/" class="logo">
+            <span class="logo-icon">Z</span>
+            <span class="logo-text">Zen<span class="logo-accent">Drive</span></span>
+          </a>
+
+          <nav class="nav" [class.open]="menuOpen">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Accueil</a>
+            <a routerLink="/fleet" routerLinkActive="active" (click)="closeMenu()">Notre Flotte</a>
+            <a routerLink="/excursions" routerLinkActive="active" (click)="closeMenu()">Excursions</a>
+            <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a>
+
+            @if (auth.isLoggedIn()) {
+              @if (auth.isAdmin()) {
+                <a routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
+              }
+              <a routerLink="/client" routerLinkActive="active" (click)="closeMenu()">Mon Espace</a>
+              <button class="btn btn-outline btn-sm" (click)="logout()">Déconnexion</button>
+            } @else {
+              <a routerLink="/auth/login" class="btn btn-outline btn-sm" (click)="closeMenu()">Connexion</a>
+              <a routerLink="/booking" class="btn btn-primary btn-sm" (click)="closeMenu()">Réserver</a>
+            }
+          </nav>
+
+          <button class="menu-toggle" (click)="toggleMenu()" [attr.aria-label]="'Menu'">
+            <span [class.open]="menuOpen"></span>
+          </button>
+        </div>
+      </div>
+    </header>

@@ -1,0 +1,34 @@
+.page-header {
+      padding: 140px 0 80px; text-align: center;
+      background: linear-gradient(135deg, var(--primary-900), var(--primary-700)); color: white;
+      h1 { font-family: 'Playfair Display', serif; font-size: 48px; margin-bottom: 16px; }
+      p { font-size: 18px; color: rgba(255,255,255,0.8); }
+    }
+    .excursions-content { padding: 60px 0 100px; }
+    .excursions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+      @media (max-width: 768px) { grid-template-columns: 1fr; }
+    }
+    .excursion-card {
+      display: flex; background: white; border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border); transition: var(--transition);
+      &:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+      @media (max-width: 768px) { flex-direction: column; }
+    }
+    .excursion-img { width: 280px; min-height: 240px; overflow: hidden; position: relative; flex-shrink: 0;
+      img { width: 100%; height: 100%; object-fit: cover; }
+      .badge { position: absolute; top: 16px; left: 16px; }
+      @media (max-width: 768px) { width: 100%; height: 200px; }
+    }
+    .excursion-body { padding: 24px; flex: 1; display: flex; flex-direction: column;
+      h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+      p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; flex: 1; }
+    }
+    .excursion-meta { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+      span { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-secondary);
+        i { font-size: 16px; color: var(--primary); }
+      }
+    }
+    .excursion-footer { display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px; border-top: 1px solid var(--border);
+      .price { font-size: 22px; font-weight: 700; color: var(--primary); }
+    }

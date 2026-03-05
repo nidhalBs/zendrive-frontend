@@ -1,0 +1,34 @@
+<section class="page-header">
+      <div class="container">
+        <h1>Nos Excursions</h1>
+        <p>Découvrez les merveilles de la Tunisie avec nos circuits personnalisés</p>
+      </div>
+    </section>
+
+    <section class="excursions-content">
+      <div class="container">
+        <div class="excursions-grid">
+          @for (exc of excursions; track exc.id) {
+            <div class="excursion-card">
+              <div class="excursion-img">
+                <img [src]="exc.imageUrl || 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=500'" [alt]="exc.name">
+                <span class="badge badge-primary">{{exc.type === 'PACKAGED' ? 'Forfait' : 'Sur Mesure'}}</span>
+              </div>
+              <div class="excursion-body">
+                <h3>{{exc.name}}</h3>
+                @if (exc.description) { <p>{{exc.description}}</p> }
+                <div class="excursion-meta">
+                  @if (exc.estimatedDurationHours) { <span><i class="material-icons">schedule</i> {{exc.estimatedDurationHours}}h</span> }
+                  <span><i class="material-icons">group</i> {{exc.minPassengers}}-{{exc.maxPassengers}} pers.</span>
+                  @if (exc.zone) { <span><i class="material-icons">map</i> {{exc.zone}}</span> }
+                </div>
+                <div class="excursion-footer">
+                  <span class="price">{{exc.basePrice}} TND</span>
+                  <a routerLink="/booking" class="btn btn-primary btn-sm">Réserver</a>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
