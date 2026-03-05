@@ -1,0 +1,81 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="page-header-bar">
+      <div>
+        <h1>Gestion des Utilisateurs</h1>
+        <p>{{totalElements}} utilisateur(s)</p>
+      </div>
+      <div class="header-actions">
+        <input class="form-control search-input" [(ngModel)]="searchTerm" (keyup.enter)="loadUsers()" placeholder="Rechercher par nom ou email...">
+        <select class="form-control filter-select" [(ngModel)]="roleFilter" (change)="loadUsers()">
+          <option value="">Tous les rôles</option>
+          <option value="CLIENT">Client</option>
+          <option value="ADMIN">Admin</option>
+          <option value="OPERATOR">Opérateur</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Utilisateur</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Rôle</th>
+                <th>Statut</th>
+                <th>Inscrit le</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of users; track u.id) {
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-avatar">{{u.firstName?.charAt(0)}}{{u.lastName?.charAt(0)}}</div>
+                      <div><strong>{{u.firstName}} {{u.lastName}}</strong></div>
+                    </div>
+                  </td>
+                  <td>{{u.email}}</td>
+                  <td>{{u.phone || '-'}}</td>
+                  <td>
+                    <select class="form-control form-control-sm" [ngModel]="u.role" (ngModelChange)="changeRole(u, $event)">
+                      <option value="CLIENT">Client</option>
+                      <option value="OPERATOR">Opérateur</option>
+                      <option value="ADMIN">Admin</option>
+                    </select>
+                  </td>
+                  <td><span class="badge" [ngClass]="u.active ? 'badge-success' : 'badge-danger'">{{u.active ? 'Actif' : 'Inactif'}}</span></td>
+                  <td>{{u.createdAt | date:'dd/MM/yyyy'}}</td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-icon" [class.active-toggle]="u.active" (click)="toggleActive(u)" [title]="u.active ? 'Désactiver' : 'Activer'">
+                        <i class="material-icons">{{u.active ? 'block' : 'check_circle'}}</i>
+                      </button>
+                      <button class="btn-icon danger" title="Supprimer" (click)="deleteUser(u)"><i class="material-icons">delete</i></button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (users.length === 0) {
+          <div class="empty-state"><i class="material-icons">people</i><p>Aucun utilisateur trouvé</p></div>
+        }
+      </div>
+    </div>
+
+    @if (totalPages > 1) {
+      <div class="pagination">
+        <button class="btn btn-outline btn-sm" [disabled]="currentPage === 0" (click)="loadPage(currentPage - 1)">Précédent</button>
+        <span>Page {{currentPage + 1}} / {{totalPages}}</span>
+        <button class="btn btn-outline btn-sm" [disabled]="currentPage >= totalPages - 1" (click)="loadPage(currentPage + 1)">Suivant</button>
+      </div>
+    }
+  </div>
+</section>

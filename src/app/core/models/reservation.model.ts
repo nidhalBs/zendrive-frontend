@@ -1,0 +1,64 @@
+export interface Reservation {
+  id: number;
+  bookingReference: string;
+  type: 'TRANSFER' | 'EXCURSION';
+  status: 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'REFUNDED';
+  clientId: number;
+  clientName?: string;
+  clientEmail?: string;
+  vehicleId?: number;
+  vehicleName?: string;
+  excursionId?: number;
+  excursionName?: string;
+  pickupLocation: string;
+  pickupLatitude?: number;
+  pickupLongitude?: number;
+  dropoffLocation?: string;
+  dropoffLatitude?: number;
+  dropoffLongitude?: number;
+  transferType?: 'ONE_WAY' | 'ROUND_TRIP';
+  pickupDate: string;
+  pickupTime: string;
+  returnDate?: string;
+  returnTime?: string;
+  passengerCount: number;
+  estimatedDistance?: number;
+  estimatedDuration?: number;
+  totalPrice: number;
+  discountAmount?: number;
+  flightNumber?: string;
+  airlineName?: string;
+  guestEmail?: string;
+  guestPhone?: string;
+  guestName?: string;
+  specialRequests?: string;
+  adminNotes?: string;
+  createdAt?: string;
+  cancelledAt?: string;
+  cancellationReason?: string;
+}
+
+export interface CreateReservationRequest {
+  type: 'TRANSFER' | 'EXCURSION';
+  pickupLocation: string;
+  pickupLatitude?: number;
+  pickupLongitude?: number;
+  dropoffLocation?: string;
+  dropoffLatitude?: number;
+  dropoffLongitude?: number;
+  transferType?: 'ONE_WAY' | 'ROUND_TRIP';
+  pickupDate: string;
+  pickupTime: string;
+  returnDate?: string;
+  returnTime?: string;
+  passengerCount: number;
+  vehicleId: number;
+  excursionId?: number;
+  flightNumber?: string;
+  airlineName?: string;
+  guestEmail?: string;
+  guestPhone?: string;
+  guestName?: string;
+  specialRequests?: string;
+  couponCode?: string;
+}

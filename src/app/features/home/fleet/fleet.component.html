@@ -1,0 +1,42 @@
+<section class="page-header">
+      <div class="container">
+        <h1>Notre Flotte</h1>
+        <p>Des véhicules premium pour tous vos besoins de transport</p>
+      </div>
+    </section>
+
+    <section class="fleet-content">
+      <div class="container">
+        <div class="filter-bar">
+          <button [class.active]="filter === 'ALL'" (click)="filter = 'ALL'">Tous</button>
+          <button [class.active]="filter === 'STANDARD'" (click)="filter = 'STANDARD'">Standard</button>
+          <button [class.active]="filter === 'PREMIUM'" (click)="filter = 'PREMIUM'">Premium</button>
+          <button [class.active]="filter === 'VIP'" (click)="filter = 'VIP'">VIP</button>
+          <button [class.active]="filter === 'LUXURY'" (click)="filter = 'LUXURY'">Luxe</button>
+        </div>
+
+        <div class="fleet-grid">
+          @for (v of filteredVehicles; track v.id) {
+            <div class="vehicle-card">
+              <div class="vehicle-img">
+                <img [src]="v.imageUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=500'" [alt]="v.name">
+                <span class="badge badge-primary">{{v.comfortLevel}}</span>
+              </div>
+              <div class="vehicle-body">
+                <h3>{{v.name}}</h3>
+                <p class="brand">{{v.brand}} {{v.model}}</p>
+                @if (v.description) { <p class="desc">{{v.description}}</p> }
+                <div class="features">
+                  <div><i class="material-icons">person</i><span>{{v.passengerCapacity}} passagers</span></div>
+                  <div><i class="material-icons">luggage</i><span>{{v.baggageCapacity}} bagages</span></div>
+                </div>
+                <div class="price-row">
+                  <span class="price">{{v.pricePerKm}} TND/km</span>
+                  <a routerLink="/booking" class="btn btn-primary btn-sm">Réserver</a>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>

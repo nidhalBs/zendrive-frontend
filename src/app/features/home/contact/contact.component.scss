@@ -1,0 +1,30 @@
+.page-header {
+      padding: 140px 0 80px; text-align: center;
+      background: linear-gradient(135deg, var(--primary-900), var(--primary-700)); color: white;
+      h1 { font-family: 'Playfair Display', serif; font-size: 48px; margin-bottom: 16px; }
+      p { font-size: 18px; color: rgba(255,255,255,0.8); }
+    }
+    .contact-content { padding: 60px 0 100px; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 48px;
+      @media (max-width: 768px) { grid-template-columns: 1fr; }
+    }
+    .contact-info {
+      h2 { font-size: 28px; font-weight: 700; margin-bottom: 32px; }
+    }
+    .info-item {
+      display: flex; gap: 16px; margin-bottom: 28px;
+      h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+      p { color: var(--text-secondary); }
+    }
+    .info-icon {
+      width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+      background: var(--primary-50); display: flex; align-items: center; justify-content: center;
+      i { font-size: 24px; color: var(--primary); }
+    }
+    .contact-form {
+      h2 { font-size: 24px; font-weight: 700; margin-bottom: 24px; }
+      .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        @media (max-width: 480px) { grid-template-columns: 1fr; }
+      }
+      textarea.form-control { resize: vertical; min-height: 120px; }
+    }

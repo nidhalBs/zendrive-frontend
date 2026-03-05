@@ -1,0 +1,138 @@
+<section class="admin-dashboard">
+      <div class="container">
+        <div class="admin-header">
+          <div>
+            <h1>Tableau de bord</h1>
+            <p>Vue d'ensemble de votre activité</p>
+          </div>
+          <div class="header-actions">
+            <span class="badge badge-primary">Admin</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card revenue">
+            <div class="stat-icon"><i class="material-icons">payments</i></div>
+            <div class="stat-content">
+              <span class="stat-value">{{stats.totalRevenue | number:'1.0-0'}} TND</span>
+              <span class="stat-label">Chiffre d'affaires</span>
+            </div>
+            <div class="stat-trend up">+12%</div>
+          </div>
+          <div class="stat-card reservations">
+            <div class="stat-icon"><i class="material-icons">event_note</i></div>
+            <div class="stat-content">
+              <span class="stat-value">{{stats.totalReservations}}</span>
+              <span class="stat-label">Réservations totales</span>
+            </div>
+            <div class="stat-trend up">+8%</div>
+          </div>
+          <div class="stat-card users">
+            <div class="stat-icon"><i class="material-icons">people</i></div>
+            <div class="stat-content">
+              <span class="stat-value">{{stats.totalUsers}}</span>
+              <span class="stat-label">Utilisateurs inscrits</span>
+            </div>
+            <div class="stat-trend up">+15%</div>
+          </div>
+          <div class="stat-card vehicles">
+            <div class="stat-icon"><i class="material-icons">directions_car</i></div>
+            <div class="stat-content">
+              <span class="stat-value">{{stats.totalVehicles}}</span>
+              <span class="stat-label">Véhicules actifs</span>
+            </div>
+          </div>
+          <div class="stat-card rating">
+            <div class="stat-icon"><i class="material-icons">star</i></div>
+            <div class="stat-content">
+              <span class="stat-value">{{stats.averageRating}}</span>
+              <span class="stat-label">Note moyenne</span>
+            </div>
+          </div>
+          <div class="stat-card pending">
+            <div class="stat-icon"><i class="material-icons">hourglass_top</i></div>
+            <div class="stat-content">
+              <span class="stat-value">{{stats.pendingReservations}}</span>
+              <span class="stat-label">En attente</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>Réservations récentes</h3>
+              <a routerLink="/admin/reservations" class="btn btn-sm btn-outline">Voir tout</a>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Référence</th>
+                      <th>Client</th>
+                      <th>Trajet</th>
+                      <th>Date</th>
+                      <th>Statut</th>
+                      <th>Montant</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (r of recentReservations; track r.id) {
+                      <tr>
+                        <td class="font-mono">{{r.bookingReference}}</td>
+                        <td>{{r.clientName}}</td>
+                        <td>{{r.pickupLocation}} → {{r.dropoffLocation}}</td>
+                        <td>{{r.pickupDate}}</td>
+                        <td><span class="badge" [ngClass]="getStatusClass(r.status)">{{getStatusLabel(r.status)}}</span></td>
+                        <td class="font-bold">{{r.totalPrice}} TND</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar">
+            <div class="card">
+              <div class="card-header"><h3>Accès rapide</h3></div>
+              <div class="card-body quick-nav">
+                <a routerLink="/admin/reservations" class="quick-link">
+                  <div class="ql-icon purple"><i class="material-icons">event_note</i></div>
+                  <div><strong>Réservations</strong><span>Gérer les réservations</span></div>
+                </a>
+                <a routerLink="/admin/vehicles" class="quick-link">
+                  <div class="ql-icon blue"><i class="material-icons">directions_car</i></div>
+                  <div><strong>Véhicules</strong><span>Gérer la flotte</span></div>
+                </a>
+                <a routerLink="/admin/users" class="quick-link">
+                  <div class="ql-icon green"><i class="material-icons">people</i></div>
+                  <div><strong>Utilisateurs</strong><span>Gérer les comptes</span></div>
+                </a>
+                <a routerLink="/admin/excursions" class="quick-link">
+                  <div class="ql-icon orange"><i class="material-icons">explore</i></div>
+                  <div><strong>Excursions</strong><span>Gérer les excursions</span></div>
+                </a>
+                <a routerLink="/admin/payments" class="quick-link">
+                  <div class="ql-icon red"><i class="material-icons">account_balance_wallet</i></div>
+                  <div><strong>Paiements</strong><span>Suivi financier</span></div>
+                </a>
+                <a routerLink="/admin/reviews" class="quick-link">
+                  <div class="ql-icon yellow"><i class="material-icons">rate_review</i></div>
+                  <div><strong>Avis</strong><span>Modérer les avis</span></div>
+                </a>
+                <a routerLink="/admin/coupons" class="quick-link">
+                  <div class="ql-icon pink"><i class="material-icons">local_offer</i></div>
+                  <div><strong>Coupons</strong><span>Gérer les promotions</span></div>
+                </a>
+                <a routerLink="/admin/routes" class="quick-link">
+                  <div class="ql-icon teal"><i class="material-icons">route</i></div>
+                  <div><strong>Itinéraires</strong><span>Gérer les trajets</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

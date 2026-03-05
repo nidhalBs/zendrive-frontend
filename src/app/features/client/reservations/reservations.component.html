@@ -1,0 +1,58 @@
+<section class="page-content">
+      <div class="container">
+        <div class="page-header-bar">
+          <div><h1>Mes Réservations</h1><p>Consultez et gérez vos réservations</p></div>
+          <a routerLink="/booking" class="btn btn-primary"><i class="material-icons">add</i> Nouvelle</a>
+        </div>
+
+        <div class="reservations-list">
+          @for (r of reservations; track r.id) {
+            <div class="reservation-card card">
+              <div class="card-body">
+                <div class="res-top">
+                  <div class="res-ref">
+                    <span class="badge" [ngClass]="getStatusClass(r.status)">{{getStatusLabel(r.status)}}</span>
+                    <span class="ref-code">{{r.bookingReference}}</span>
+                  </div>
+                  <span class="res-type badge badge-neutral">{{r.type === 'TRANSFER' ? 'Transfert' : 'Excursion'}}</span>
+                </div>
+                <div class="res-route">
+                  <div class="route-point"><i class="material-icons">trip_origin</i><span>{{r.pickupLocation}}</span></div>
+                  @if (r.dropoffLocation) {
+                    <div class="route-line"></div>
+                    <div class="route-point"><i class="material-icons">place</i><span>{{r.dropoffLocation}}</span></div>
+                  }
+                </div>
+                <div class="res-details">
+                  <span><i class="material-icons">event</i> {{r.pickupDate}}</span>
+                  <span><i class="material-icons">schedule</i> {{r.pickupTime}}</span>
+                  <span><i class="material-icons">group</i> {{r.passengerCount}} pers.</span>
+                  <span class="res-price"><i class="material-icons">payments</i> {{r.totalPrice}} TND</span>
+                </div>
+                @if (r.status === 'PENDING' || r.status === 'CONFIRMED') {
+                  <button class="btn btn-danger btn-sm" (click)="cancelReservation(r)">Annuler</button>
+                }
+              </div>
+            </div>
+          }
+          @if (reservations.length === 0) {
+            <div class="empty-state card">
+              <div class="card-body text-center">
+                <i class="material-icons" style="font-size:64px;color:var(--text-light)">event_busy</i>
+                <h3>Aucune réservation</h3>
+                <p class="text-muted">Commencez par réserver votre premier transfert</p>
+                <a routerLink="/booking" class="btn btn-primary mt-2">Réserver</a>
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination">
+            <button class="btn btn-outline btn-sm" [disabled]="currentPage === 0" (click)="loadPage(currentPage - 1)">Précédent</button>
+            <span>Page {{currentPage + 1}} / {{totalPages}}</span>
+            <button class="btn btn-outline btn-sm" [disabled]="currentPage >= totalPages - 1" (click)="loadPage(currentPage + 1)">Suivant</button>
+          </div>
+        }
+      </div>
+    </section>

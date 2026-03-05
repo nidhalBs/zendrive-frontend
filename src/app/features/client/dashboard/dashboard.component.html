@@ -1,0 +1,87 @@
+<section class="dashboard-page">
+      <div class="container">
+        <div class="dashboard-header">
+          <div>
+            <h1>Bienvenue, {{user?.firstName}}</h1>
+            <p>Gérez vos réservations et votre compte</p>
+          </div>
+          <a routerLink="/booking" class="btn btn-primary"><i class="material-icons">add</i> Nouvelle réservation</a>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon purple"><i class="material-icons">event</i></div>
+            <div class="stat-info"><span class="stat-value">{{totalReservations}}</span><span class="stat-label">Réservations</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="material-icons">pending</i></div>
+            <div class="stat-info"><span class="stat-value">{{pendingReservations}}</span><span class="stat-label">En attente</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="material-icons">star</i></div>
+            <div class="stat-info"><span class="stat-value">{{loyaltyPoints}}</span><span class="stat-label">Points fidélité</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange"><i class="material-icons">notifications</i></div>
+            <div class="stat-info"><span class="stat-value">{{unreadNotifs}}</span><span class="stat-label">Notifications</span></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>Réservations récentes</h3>
+              <a routerLink="/client/reservations" class="btn btn-sm btn-outline">Voir tout</a>
+            </div>
+            <div class="card-body">
+              @if (recentReservations.length === 0) {
+                <div class="empty-state">
+                  <i class="material-icons">event_busy</i>
+                  <p>Aucune réservation pour le moment</p>
+                  <a routerLink="/booking" class="btn btn-primary btn-sm">Réserver maintenant</a>
+                </div>
+              } @else {
+                @for (r of recentReservations; track r.id) {
+                  <div class="reservation-item">
+                    <div class="reservation-main">
+                      <span class="badge" [ngClass]="getStatusClass(r.status)">{{getStatusLabel(r.status)}}</span>
+                      <strong>{{r.pickupLocation}}</strong>
+                      @if (r.dropoffLocation) { <span class="arrow">→</span> <strong>{{r.dropoffLocation}}</strong> }
+                    </div>
+                    <div class="reservation-meta">
+                      <span>{{r.pickupDate}} à {{r.pickupTime}}</span>
+                      <span class="text-primary font-bold">{{r.totalPrice}} TND</span>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+
+          <div class="sidebar-cards">
+            <div class="card">
+              <div class="card-body">
+                <h3>Programme Fidélité</h3>
+                <div class="loyalty-display">
+                  <div class="loyalty-circle">
+                    <span class="loyalty-points">{{loyaltyPoints}}</span>
+                    <span class="loyalty-label">points</span>
+                  </div>
+                </div>
+                <a routerLink="/client/loyalty" class="btn btn-outline btn-sm w-100">Voir mes avantages</a>
+              </div>
+            </div>
+
+            <div class="card quick-links">
+              <div class="card-body">
+                <h3>Accès rapide</h3>
+                <a routerLink="/client/profile"><i class="material-icons">person</i> Mon profil</a>
+                <a routerLink="/client/reservations"><i class="material-icons">list_alt</i> Mes réservations</a>
+                <a routerLink="/client/notifications"><i class="material-icons">notifications</i> Notifications</a>
+                <a routerLink="/client/loyalty"><i class="material-icons">loyalty</i> Programme fidélité</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

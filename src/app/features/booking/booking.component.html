@@ -1,0 +1,169 @@
+<section class="page-header">
+      <div class="container">
+        <h1>Réservation</h1>
+        <p>Réservez votre transport en quelques étapes simples</p>
+      </div>
+    </section>
+
+    <section class="booking-content">
+      <div class="container">
+        <div class="steps">
+          <div class="step" [class.active]="step >= 1" [class.done]="step > 1"><span>1</span> Trajet</div>
+          <div class="step-line" [class.active]="step > 1"></div>
+          <div class="step" [class.active]="step >= 2" [class.done]="step > 2"><span>2</span> Véhicule</div>
+          <div class="step-line" [class.active]="step > 2"></div>
+          <div class="step" [class.active]="step >= 3"><span>3</span> Confirmation</div>
+        </div>
+
+        <!-- Step 1: Trip Details -->
+        @if (step === 1) {
+          <div class="booking-form card animate-fade-in">
+            <div class="card-body">
+              <h2>Détails du trajet</h2>
+              <div class="form-tabs">
+                <button [class.active]="tripType === 'TRANSFER'" (click)="tripType = 'TRANSFER'">
+                  <i class="material-icons">flight</i> Transfert
+                </button>
+                <button [class.active]="tripType === 'EXCURSION'" (click)="tripType = 'EXCURSION'">
+                  <i class="material-icons">explore</i> Excursion
+                </button>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Lieu de prise en charge *</label>
+                  <input class="form-control" [(ngModel)]="pickup" placeholder="Aéroport Tunis-Carthage, Hôtel...">
+                </div>
+                @if (tripType === 'TRANSFER') {
+                  <div class="form-group">
+                    <label>Destination *</label>
+                    <input class="form-control" [(ngModel)]="dropoff" placeholder="Votre destination...">
+                  </div>
+                }
+                <div class="form-group">
+                  <label>Date de prise en charge *</label>
+                  <input type="date" class="form-control" [(ngModel)]="pickupDate">
+                </div>
+                <div class="form-group">
+                  <label>Heure *</label>
+                  <input type="time" class="form-control" [(ngModel)]="pickupTime">
+                </div>
+                <div class="form-group">
+                  <label>Nombre de passagers *</label>
+                  <select class="form-control" [(ngModel)]="passengers">
+                    @for (i of [1,2,3,4,5,6,7,8]; track i) {
+                      <option [value]="i">{{i}}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Type de trajet</label>
+                  <select class="form-control" [(ngModel)]="transferType">
+                    <option value="ONE_WAY">Aller simple</option>
+                    <option value="ROUND_TRIP">Aller-retour</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Numéro de vol (optionnel)</label>
+                <input class="form-control" [(ngModel)]="flightNumber" placeholder="Ex: TU 720">
+              </div>
+              <div class="form-group">
+                <label>Demandes spéciales (optionnel)</label>
+                <textarea class="form-control" [(ngModel)]="specialRequests" rows="3" placeholder="Siège bébé, fauteuil roulant..."></textarea>
+              </div>
+
+              <button class="btn btn-primary btn-lg w-100" (click)="nextStep()" [disabled]="!pickup || !pickupDate || !pickupTime">
+                Choisir un véhicule <i class="material-icons">arrow_forward</i>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Step 2: Vehicle Selection -->
+        @if (step === 2) {
+          <div class="animate-fade-in">
+            <div class="d-flex justify-between align-center mb-3">
+              <h2>Choisissez votre véhicule</h2>
+              <button class="btn btn-outline btn-sm" (click)="step = 1">
+                <i class="material-icons">arrow_back</i> Retour
+              </button>
+            </div>
+            <div class="vehicles-grid">
+              @for (v of vehicles; track v.id) {
+                <div class="vehicle-select-card" [class.selected]="selectedVehicle?.id === v.id" (click)="selectVehicle(v)">
+                  <div class="vs-image">
+                    <img [src]="v.imageUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400'" [alt]="v.name">
+                    <span class="badge badge-primary">{{v.comfortLevel}}</span>
+                  </div>
+                  <div class="vs-info">
+                    <h3>{{v.name}}</h3>
+                    <p>{{v.brand}} {{v.model}}</p>
+                    <div class="vs-features">
+                      <span><i class="material-icons">person</i> {{v.passengerCapacity}}</span>
+                      <span><i class="material-icons">luggage</i> {{v.baggageCapacity}}</span>
+                    </div>
+                    <div class="vs-price">{{v.baseFare || v.pricePerKm}} TND</div>
+                  </div>
+                  @if (selectedVehicle?.id === v.id) {
+                    <div class="vs-check"><i class="material-icons">check_circle</i></div>
+                  }
+                </div>
+              }
+            </div>
+            <button class="btn btn-primary btn-lg w-100 mt-3" (click)="nextStep()" [disabled]="!selectedVehicle">
+              Continuer <i class="material-icons">arrow_forward</i>
+            </button>
+          </div>
+        }
+
+        <!-- Step 3: Confirmation -->
+        @if (step === 3) {
+          <div class="confirmation animate-fade-in">
+            <div class="card">
+              <div class="card-body">
+                <div class="confirm-header">
+                  <i class="material-icons confirm-icon">check_circle</i>
+                  <h2>Récapitulatif de la réservation</h2>
+                </div>
+
+                <div class="confirm-grid">
+                  <div class="confirm-section">
+                    <h4>Détails du trajet</h4>
+                    <div class="confirm-row"><span>Prise en charge</span><strong>{{pickup}}</strong></div>
+                    @if (dropoff) { <div class="confirm-row"><span>Destination</span><strong>{{dropoff}}</strong></div> }
+                    <div class="confirm-row"><span>Date</span><strong>{{pickupDate}}</strong></div>
+                    <div class="confirm-row"><span>Heure</span><strong>{{pickupTime}}</strong></div>
+                    <div class="confirm-row"><span>Passagers</span><strong>{{passengers}}</strong></div>
+                  </div>
+                  <div class="confirm-section">
+                    <h4>Véhicule sélectionné</h4>
+                    <div class="confirm-row"><span>Véhicule</span><strong>{{selectedVehicle?.name}}</strong></div>
+                    <div class="confirm-row"><span>Catégorie</span><strong>{{selectedVehicle?.comfortLevel}}</strong></div>
+                    <div class="confirm-row"><span>Prix estimé</span><strong class="text-primary">{{selectedVehicle?.baseFare || selectedVehicle?.pricePerKm}} TND</strong></div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Code promo (optionnel)</label>
+                  <div class="d-flex gap-1">
+                    <input class="form-control" [(ngModel)]="couponCode" placeholder="Entrez votre code">
+                    <button class="btn btn-outline">Appliquer</button>
+                  </div>
+                </div>
+
+                <div class="confirm-actions">
+                  <button class="btn btn-outline" (click)="step = 2">
+                    <i class="material-icons">arrow_back</i> Retour
+                  </button>
+                  <button class="btn btn-primary btn-lg" (click)="confirmBooking()">
+                    <i class="material-icons">payment</i> Confirmer et payer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>

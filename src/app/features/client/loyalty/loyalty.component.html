@@ -1,0 +1,47 @@
+<section class="page-content">
+      <div class="container">
+        <h1>Programme Fidélité</h1>
+        <p class="text-muted mb-3">Accumulez des points et profitez d'avantages exclusifs</p>
+
+        <div class="loyalty-header">
+          <div class="points-card">
+            <div class="points-circle">
+              <span class="points-value">{{account?.availablePoints || 0}}</span>
+              <span class="points-label">points disponibles</span>
+            </div>
+            <p>Total accumulé : <strong>{{account?.totalPoints || 0}} points</strong></p>
+          </div>
+
+          <div class="coupon-card card">
+            <div class="card-body">
+              <h3>Valider un code promo</h3>
+              <div class="d-flex gap-1">
+                <input class="form-control" [(ngModel)]="couponCode" placeholder="Entrez votre code">
+                <button class="btn btn-primary" (click)="validateCoupon()">Valider</button>
+              </div>
+              @if (couponMessage) { <p class="mt-1" [class.text-success]="couponValid" [class.text-danger]="!couponValid">{{couponMessage}}</p> }
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header"><h3>Historique des transactions</h3></div>
+          <div class="card-body">
+            @for (t of transactions; track t.id) {
+              <div class="transaction-item">
+                <div class="tx-info">
+                  <strong>{{t.description}}</strong>
+                  <span class="text-muted">{{t.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+                </div>
+                <span class="tx-points" [class.positive]="t.points > 0" [class.negative]="t.points < 0">
+                  {{t.points > 0 ? '+' : ''}}{{t.points}} pts
+                </span>
+              </div>
+            }
+            @if (transactions.length === 0) {
+              <p class="text-muted text-center">Aucune transaction pour le moment</p>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
