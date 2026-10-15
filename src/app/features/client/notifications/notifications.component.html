@@ -1,0 +1,32 @@
+<section class="page-content">
+      <div class="container">
+        <div class="page-header-bar">
+          <div><h1>Notifications</h1><p class="text-muted">{{unreadCount}} non lue(s)</p></div>
+          <button class="btn btn-outline btn-sm" (click)="markAllRead()">Tout marquer comme lu</button>
+        </div>
+
+        <div class="notifications-list">
+          @for (n of notifications; track n.id) {
+            <div class="notification-item card" [class.unread]="!n.read" (click)="markRead(n)">
+              <div class="card-body">
+                <div class="notif-header">
+                  <div class="notif-icon" [class.unread]="!n.read"><i class="material-icons">{{getIcon(n.type)}}</i></div>
+                  <div class="notif-content">
+                    <strong>{{n.subject}}</strong>
+                    <p>{{n.content}}</p>
+                    <span class="notif-time">{{n.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+                  </div>
+                  @if (!n.read) { <span class="unread-dot"></span> }
+                </div>
+              </div>
+            </div>
+          }
+          @if (notifications.length === 0) {
+            <div class="card"><div class="card-body text-center">
+              <i class="material-icons" style="font-size:48px;color:var(--text-light)">notifications_none</i>
+              <p class="text-muted mt-1">Aucune notification</p>
+            </div></div>
+          }
+        </div>
+      </div>
+    </section>

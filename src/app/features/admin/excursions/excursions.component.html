@@ -1,0 +1,87 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="page-header-bar">
+      <div>
+        <h1>Gestion des Excursions</h1>
+        <p>{{excursions.length}} excursion(s)</p>
+      </div>
+      <button class="btn btn-primary" (click)="showForm = true; resetForm()"><i class="material-icons">add</i> Ajouter</button>
+    </div>
+
+    <div class="excursions-grid">
+      @for (e of excursions; track e.id) {
+        <div class="card excursion-card">
+          <div class="exc-img">
+            <img [src]="e.imageUrl || 'assets/excursion-placeholder.jpg'" [alt]="e.name">
+            <span class="badge" [ngClass]="e.type === 'PACKAGED' ? 'badge-primary' : 'badge-info'">{{e.type === 'PACKAGED' ? 'Package' : 'Sur mesure'}}</span>
+          </div>
+          <div class="card-body">
+            <h3>{{e.name}}</h3>
+            <p class="text-muted">{{e.description | slice:0:100}}...</p>
+            <div class="exc-details">
+                            <span><i class="material-icons">schedule</i> {{e.estimatedDurationHours}}h</span>
+                            <span><i class="material-icons">people</i> Max {{e.maxPassengers}}</span>
+              <span><i class="material-icons">place</i> {{e.zone}}</span>
+            </div>
+            <div class="exc-footer">
+              <span class="exc-price">{{e.basePrice}} TND</span>
+              <div class="exc-actions">
+                <button class="btn btn-outline btn-sm" (click)="editExcursion(e)"><i class="material-icons">edit</i></button>
+                <button class="btn btn-danger btn-sm" (click)="deleteExcursion(e)"><i class="material-icons">delete</i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (excursions.length === 0) {
+      <div class="card"><div class="card-body empty-state">
+        <i class="material-icons">explore</i><p>Aucune excursion enregistrée</p>
+      </div></div>
+    }
+
+    @if (showForm) {
+      <div class="modal-overlay" (click)="showForm = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>{{editingExcursion ? 'Modifier' : 'Ajouter'}} une excursion</h2>
+            <button class="btn-icon" (click)="showForm = false"><i class="material-icons">close</i></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group"><label>Nom</label><input class="form-control" [(ngModel)]="form.name" placeholder="Nom de l'excursion"></div>
+            <div class="form-group"><label>Description</label><textarea class="form-control" [(ngModel)]="form.description" rows="3"></textarea></div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Type</label>
+                <select class="form-control" [(ngModel)]="form.type">
+                  <option value="PACKAGED">Package</option>
+                  <option value="CUSTOM">Sur mesure</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Zone</label><input class="form-control" [(ngModel)]="form.zone" placeholder="Ex: Nord Tunisie"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Durée</label><input class="form-control" [(ngModel)]="form.duration" placeholder="Ex: 8h"></div>
+              <div class="form-group"><label>Participants max</label><input class="form-control" type="number" [(ngModel)]="form.maxParticipants"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Prix (TND)</label><input class="form-control" type="number" [(ngModel)]="form.price"></div>
+              <div class="form-group"><label>URL Image</label><input class="form-control" [(ngModel)]="form.imageUrl"></div>
+            </div>
+            <div class="form-group"><label>Points d'intérêt (séparés par virgule)</label><input class="form-control" [(ngModel)]="form.highlights" placeholder="Sidi Bou Said, Carthage, La Marsa"></div>
+            <div class="form-group checkbox-group">
+              <label><input type="checkbox" [(ngModel)]="form.lunchIncluded"> Déjeuner inclus</label>
+              <label><input type="checkbox" [(ngModel)]="form.guideIncluded"> Guide inclus</label>
+              <label><input type="checkbox" [(ngModel)]="form.active"> Actif</label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-outline" (click)="showForm = false">Annuler</button>
+              <button class="btn btn-primary" (click)="saveExcursion()">{{editingExcursion ? 'Modifier' : 'Ajouter'}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

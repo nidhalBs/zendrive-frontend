@@ -1,0 +1,98 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="page-header-bar">
+      <div>
+        <h1>Gestion des Véhicules</h1>
+        <p>{{vehicles.length}} véhicule(s)</p>
+      </div>
+      <button class="btn btn-primary" (click)="showForm = true; resetForm()"><i class="material-icons">add</i> Ajouter un véhicule</button>
+    </div>
+
+    <div class="vehicles-grid">
+      @for (v of vehicles; track v.id) {
+        <div class="card vehicle-card">
+          <div class="vehicle-img">
+            <img [src]="v.imageUrl || 'assets/vehicle-placeholder.jpg'" [alt]="v.name">
+            <span class="badge" [ngClass]="v.status === 'AVAILABLE' ? 'badge-success' : 'badge-danger'">{{v.status === 'AVAILABLE' ? 'Disponible' : 'Indisponible'}}</span>
+          </div>
+          <div class="card-body">
+            <h3>{{v.name}}</h3>
+            <p class="text-muted">{{v.brand}} {{v.model}}</p>
+            <div class="vehicle-specs">
+                            <span><i class="material-icons">people</i> {{v.passengerCapacity}} places</span>
+                            <span><i class="material-icons">luggage</i> {{v.baggageCapacity}} bagages</span>
+            </div>
+            <div class="vehicle-meta">
+              <span class="badge badge-neutral">{{v.comfortLevel}}</span>
+              <span class="vehicle-price">{{v.pricePerKm}} TND/km</span>
+            </div>
+            <div class="vehicle-actions">
+              <button class="btn btn-outline btn-sm" (click)="editVehicle(v)"><i class="material-icons">edit</i> Modifier</button>
+              <button class="btn btn-danger btn-sm" (click)="deleteVehicle(v)"><i class="material-icons">delete</i></button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (vehicles.length === 0) {
+      <div class="card"><div class="card-body empty-state">
+        <i class="material-icons">directions_car</i><p>Aucun véhicule enregistré</p>
+      </div></div>
+    }
+
+    <!-- Add/Edit Modal -->
+    @if (showForm) {
+      <div class="modal-overlay" (click)="showForm = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>{{editingVehicle ? 'Modifier' : 'Ajouter'}} un véhicule</h2>
+            <button class="btn-icon" (click)="showForm = false"><i class="material-icons">close</i></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group"><label>Nom</label><input class="form-control" [(ngModel)]="form.name" placeholder="Ex: Mercedes Classe V"></div>
+              <div class="form-group"><label>Marque</label><input class="form-control" [(ngModel)]="form.brand" placeholder="Ex: Mercedes"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Modèle</label><input class="form-control" [(ngModel)]="form.model" placeholder="Ex: Classe V"></div>
+              <div class="form-group"><label>Année</label><input class="form-control" type="number" [(ngModel)]="form.year"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Passagers max</label><input class="form-control" type="number" [(ngModel)]="form.maxPassengers"></div>
+              <div class="form-group"><label>Bagages max</label><input class="form-control" type="number" [(ngModel)]="form.maxBaggage"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Prix/km (TND)</label><input class="form-control" type="number" step="0.1" [(ngModel)]="form.pricePerKm"></div>
+              <div class="form-group"><label>Prix de base (TND)</label><input class="form-control" type="number" step="0.1" [(ngModel)]="form.basePrice"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Niveau de confort</label>
+                <select class="form-control" [(ngModel)]="form.comfortLevel">
+                  <option value="STANDARD">Standard</option>
+                  <option value="PREMIUM">Premium</option>
+                  <option value="VIP">VIP</option>
+                  <option value="LUXURY">Luxe</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Immatriculation</label><input class="form-control" [(ngModel)]="form.licensePlate"></div>
+            </div>
+            <div class="form-group"><label>URL Image</label><input class="form-control" [(ngModel)]="form.imageUrl" placeholder="https://..."></div>
+            <div class="form-group"><label>Description</label><textarea class="form-control" [(ngModel)]="form.description" rows="3"></textarea></div>
+            <div class="form-group checkbox-group">
+              <label><input type="checkbox" [(ngModel)]="form.available"> Véhicule disponible</label>
+              <label><input type="checkbox" [(ngModel)]="form.hasWifi"> WiFi</label>
+              <label><input type="checkbox" [(ngModel)]="form.hasAC"> Climatisation</label>
+              <label><input type="checkbox" [(ngModel)]="form.hasCharger"> Chargeur</label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-outline" (click)="showForm = false">Annuler</button>
+              <button class="btn btn-primary" (click)="saveVehicle()">{{editingVehicle ? 'Modifier' : 'Ajouter'}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

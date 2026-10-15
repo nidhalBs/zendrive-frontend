@@ -1,0 +1,119 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="page-header-bar">
+      <div>
+        <h1>Gestion des Réservations</h1>
+        <p>{{totalElements}} réservation(s) au total</p>
+      </div>
+      <div class="header-actions">
+        <select class="form-control filter-select" [(ngModel)]="statusFilter" (change)="loadReservations()">
+          <option value="">Tous les statuts</option>
+          <option value="PENDING">En attente</option>
+          <option value="CONFIRMED">Confirmées</option>
+          <option value="IN_PROGRESS">En cours</option>
+          <option value="COMPLETED">Terminées</option>
+          <option value="CANCELLED">Annulées</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Référence</th>
+                <th>Client</th>
+                <th>Type</th>
+                <th>Départ</th>
+                <th>Destination</th>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Passagers</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of reservations; track r.id) {
+                <tr>
+                  <td class="font-mono">{{r.bookingReference}}</td>
+                  <td>{{r.clientName}}</td>
+                  <td><span class="badge badge-neutral">{{r.type === 'TRANSFER' ? 'Transfert' : 'Excursion'}}</span></td>
+                  <td>{{r.pickupLocation}}</td>
+                  <td>{{r.dropoffLocation || '-'}}</td>
+                  <td>{{r.pickupDate}}</td>
+                  <td>{{r.pickupTime}}</td>
+                  <td>{{r.passengerCount}}</td>
+                  <td class="font-bold text-primary">{{r.totalPrice}} TND</td>
+                  <td><span class="badge" [ngClass]="getStatusClass(r.status)">{{getStatusLabel(r.status)}}</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-icon" title="Voir" (click)="viewReservation(r)"><i class="material-icons">visibility</i></button>
+                      @if (r.status === 'PENDING') {
+                        <button class="btn-icon success" title="Confirmer" (click)="updateStatus(r, 'CONFIRMED')"><i class="material-icons">check_circle</i></button>
+                      }
+                      @if (r.status === 'CONFIRMED') {
+                        <button class="btn-icon primary" title="Démarrer" (click)="updateStatus(r, 'IN_PROGRESS')"><i class="material-icons">play_circle</i></button>
+                      }
+                      @if (r.status === 'IN_PROGRESS') {
+                        <button class="btn-icon success" title="Terminer" (click)="updateStatus(r, 'COMPLETED')"><i class="material-icons">task_alt</i></button>
+                      }
+                      @if (r.status !== 'CANCELLED' && r.status !== 'COMPLETED') {
+                        <button class="btn-icon danger" title="Annuler" (click)="cancelReservation(r)"><i class="material-icons">cancel</i></button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (reservations.length === 0) {
+          <div class="empty-state"><i class="material-icons">event_busy</i><p>Aucune réservation trouvée</p></div>
+        }
+      </div>
+    </div>
+
+    @if (totalPages > 1) {
+      <div class="pagination">
+        <button class="btn btn-outline btn-sm" [disabled]="currentPage === 0" (click)="loadPage(currentPage - 1)">Précédent</button>
+        <span>Page {{currentPage + 1}} / {{totalPages}}</span>
+        <button class="btn btn-outline btn-sm" [disabled]="currentPage >= totalPages - 1" (click)="loadPage(currentPage + 1)">Suivant</button>
+      </div>
+    }
+
+    <!-- Detail Modal -->
+    @if (selectedReservation) {
+      <div class="modal-overlay" (click)="selectedReservation = null">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>Détails de la réservation</h2>
+            <button class="btn-icon" (click)="selectedReservation = null"><i class="material-icons">close</i></button>
+          </div>
+          <div class="modal-body">
+            <div class="detail-grid">
+              <div class="detail-item"><label>Référence</label><span>{{selectedReservation.bookingReference}}</span></div>
+              <div class="detail-item"><label>Client</label><span>{{selectedReservation.clientName}}</span></div>
+              <div class="detail-item"><label>Départ</label><span>{{selectedReservation.pickupLocation}}</span></div>
+              <div class="detail-item"><label>Destination</label><span>{{selectedReservation.dropoffLocation}}</span></div>
+              <div class="detail-item"><label>Date</label><span>{{selectedReservation.pickupDate}}</span></div>
+              <div class="detail-item"><label>Heure</label><span>{{selectedReservation.pickupTime}}</span></div>
+              <div class="detail-item"><label>Passagers</label><span>{{selectedReservation.passengerCount}}</span></div>
+              <div class="detail-item"><label>Montant</label><span class="text-primary font-bold">{{selectedReservation.totalPrice}} TND</span></div>
+              <div class="detail-item"><label>Statut</label><span class="badge" [ngClass]="getStatusClass(selectedReservation.status)">{{getStatusLabel(selectedReservation.status)}}</span></div>
+              @if (selectedReservation.flightNumber) {
+                <div class="detail-item"><label>N° Vol</label><span>{{selectedReservation.flightNumber}}</span></div>
+              }
+              @if (selectedReservation.specialRequests) {
+                <div class="detail-item full"><label>Demandes spéciales</label><span>{{selectedReservation.specialRequests}}</span></div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

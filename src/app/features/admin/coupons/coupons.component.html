@@ -1,0 +1,113 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="page-header-bar">
+      <div>
+        <h1>Gestion des Coupons</h1>
+        <p>{{coupons.length}} coupon(s)</p>
+      </div>
+      <button class="btn btn-primary" (click)="showForm = true; resetForm()"><i class="material-icons">add</i> Créer un coupon</button>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Description</th>
+                <th>Réduction</th>
+                <th>Utilisation</th>
+                <th>Validité</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of coupons; track c.id) {
+                <tr>
+                  <td><span class="coupon-code">{{c.code}}</span></td>
+                  <td>{{c.description}}</td>
+                  <td class="font-bold text-primary">
+                    @if (c.discountType === 'PERCENTAGE') { {{c.discountValue}}% }
+                    @else { {{c.discountValue}} TND }
+                  </td>
+                  <td>{{c.usageCount}} / {{c.maxUsage || '∞'}}</td>
+                  <td>
+                    <span class="validity">
+                      {{c.startDate | date:'dd/MM/yyyy'}} - {{c.endDate | date:'dd/MM/yyyy'}}
+                    </span>
+                  </td>
+                  <td><span class="badge" [ngClass]="c.active ? 'badge-success' : 'badge-danger'">{{c.active ? 'Actif' : 'Inactif'}}</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-icon" title="Modifier" (click)="editCoupon(c)"><i class="material-icons">edit</i></button>
+                      <button class="btn-icon" [title]="c.active ? 'Désactiver' : 'Activer'" (click)="toggleCoupon(c)">
+                        <i class="material-icons">{{c.active ? 'toggle_on' : 'toggle_off'}}</i>
+                      </button>
+                      <button class="btn-icon danger" title="Supprimer" (click)="deleteCoupon(c)"><i class="material-icons">delete</i></button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (coupons.length === 0) {
+          <div class="empty-state"><i class="material-icons">local_offer</i><p>Aucun coupon créé</p></div>
+        }
+      </div>
+    </div>
+
+    @if (showForm) {
+      <div class="modal-overlay" (click)="showForm = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>{{editingCoupon ? 'Modifier' : 'Créer'}} un coupon</h2>
+            <button class="btn-icon" (click)="showForm = false"><i class="material-icons">close</i></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Code</label>
+                <div class="input-with-btn">
+                  <input class="form-control" [(ngModel)]="form.code" placeholder="PROMO2024" [readonly]="!!editingCoupon">
+                  @if (!editingCoupon) {
+                    <button class="btn btn-outline btn-sm" (click)="generateCode()">Générer</button>
+                  }
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Type de réduction</label>
+                <select class="form-control" [(ngModel)]="form.discountType">
+                  <option value="PERCENTAGE">Pourcentage (%)</option>
+                  <option value="FIXED">Montant fixe (TND)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Valeur de réduction</label><input class="form-control" type="number" [(ngModel)]="form.discountValue"></div>
+              <div class="form-group"><label>Utilisation max (0 = illimité)</label><input class="form-control" type="number" [(ngModel)]="form.maxUsage"></div>
+            </div>
+            <div class="form-group"><label>Description</label><input class="form-control" [(ngModel)]="form.description" placeholder="Description du coupon"></div>
+            <div class="form-row">
+              <div class="form-group"><label>Date de début</label><input class="form-control" type="date" [(ngModel)]="form.startDate"></div>
+              <div class="form-group"><label>Date de fin</label><input class="form-control" type="date" [(ngModel)]="form.endDate"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Montant minimum (TND)</label><input class="form-control" type="number" [(ngModel)]="form.minOrderAmount"></div>
+              <div class="form-group"><label>Réduction max (TND)</label><input class="form-control" type="number" [(ngModel)]="form.maxDiscountAmount"></div>
+            </div>
+            <div class="form-group checkbox-group">
+              <label><input type="checkbox" [(ngModel)]="form.active"> Coupon actif</label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-outline" (click)="showForm = false">Annuler</button>
+              <button class="btn btn-primary" (click)="saveCoupon()">{{editingCoupon ? 'Modifier' : 'Créer'}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
